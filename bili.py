@@ -1,7 +1,7 @@
 # -*- codeing = utf-8 -*-
 # @Time: 2020/4/28上午9:53
 # @Author: KAN
-# @File: 3.py
+# @File: bili.py
 # @Software: PyCharm
 
 from bs4 import BeautifulSoup
@@ -15,14 +15,14 @@ import os
 
 ssl._create_default_https_context = ssl._create_unverified_context
 
-#图片个数
+# 图片个数
 imgNumber = 0
-#专栏个数
+# 专栏个数
 columnNumber = 0
-#总页数
+# 总页数
 end = 0
 end_1 = 0
-#当前页数
+# 当前页数
 nowPager = 1
 
 
@@ -41,8 +41,13 @@ def getURL(url):
     except ValueError:
         end = 1;
         end_1 = 1;
-    # 获取下一页按钮元素
-    nextPager = d.find_element_by_class_name("be-pager-next")
+    try:
+        # 获取下一页按钮元素
+        nextPager = d.find_element_by_class_name("be-pager-next")
+    except (selenium.common.exceptions.NoSuchElementException):
+        d.close()
+        print("输入的ID可能有误")
+        return -1
     for i in range(end - 1):
         # 模拟点击下一页
         ActionChains(d).move_to_element(nextPager).click(nextPager).perform()
@@ -106,7 +111,10 @@ def downloadDatalist(datalist):
                 # 文件后缀
                 fileType = a[len(a) - 4:]
                 # 打开图片
-                res = urllib.request.urlopen(a)
+                try:
+                    res = urllib.request.urlopen(a)
+                except urllib.error.URLError:
+                    continue;
                 try:
                     os.mkdir("bb")
                 except FileExistsError:
@@ -128,18 +136,24 @@ def main():
     # https://space.bilibili.com/7892952
     global imgNumber, columnNumber
     # 爬取地址
-    baseurl = input("输入主页地址：") + "/article"
+    baseurl = "https://space.bilibili.com/" + input("输入账号ID：") + "/article"
     # getURL获取需要爬取的源码
     html = getURL(baseurl)
+    if html == -1:
+        print("end")
+        return
     # getData处理爬取后的数据
     datalist = getData(html)
     for i in datalist:
         print(i)
     print("一共获取了%d页，%d个专栏，%d张图片" % (end, columnNumber, imgNumber))
     inp = input("是否下载？Y/N  ")
-    if inp == "Y" or "y":
+    if inp in "Y" or inp in "y":
         # 下载
         downloadDatalist(datalist)
+    elif inp in "N" or inp in "n":
+        print("end")
+        return
     print("end")
 
 
