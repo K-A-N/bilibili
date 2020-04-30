@@ -37,7 +37,7 @@ def getURL(url):
     html = [d.page_source]
     try:
         # 获取页数
-        end = int("".join(re.compile('title="最后一页:\d').findall(str(html[0])))[12:])
+        end = int("".join(re.compile('title="最后一页:\d*').findall(str(html[0])))[12:])
     except ValueError:
         end = 1;
         end_1 = 1;
