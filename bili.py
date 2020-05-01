@@ -42,7 +42,7 @@ def getURL(url):
         end = 1;
         end_1 = 1;
     try:
-        # 获取下一页按钮元素
+        # 获取下一页按钮元素∂
         nextPager = d.find_element_by_class_name("be-pager-next")
     except (selenium.common.exceptions.NoSuchElementException):
         d.close()
@@ -105,6 +105,10 @@ def getData(html):
 # 下载文件
 def downloadDatalist(datalist):
     counter = 1;
+    try:
+        os.mkdir("bb")
+    except FileExistsError:
+        pass
     for i in datalist:
         for j in i:
             for a in j:
@@ -115,10 +119,6 @@ def downloadDatalist(datalist):
                     res = urllib.request.urlopen(a)
                 except urllib.error.URLError:
                     continue;
-                try:
-                    os.mkdir("bb")
-                except FileExistsError:
-                    pass
                 # 文件路径
                 path = "./bb/" + str(counter) + fileType
                 # 新建文件
