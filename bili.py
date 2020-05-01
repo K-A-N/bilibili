@@ -104,7 +104,7 @@ def getData(html):
 
 # 下载文件
 def downloadDatalist(datalist):
-    counter = 1;
+    counter = 1
     try:
         os.mkdir("bb")
     except FileExistsError:
@@ -118,7 +118,7 @@ def downloadDatalist(datalist):
                 try:
                     res = urllib.request.urlopen(a)
                 except urllib.error.URLError:
-                    continue;
+                    continue
                 # 文件路径
                 path = "./bb/" + str(counter) + fileType
                 # 新建文件
