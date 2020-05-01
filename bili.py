@@ -131,9 +131,6 @@ def downloadDatalist(datalist):
 
 
 def main():
-    # https://space.bilibili.com/228149311
-    # https://space.bilibili.com/30924338
-    # https://space.bilibili.com/7892952
     global imgNumber, columnNumber
     # 爬取地址
     baseurl = "https://space.bilibili.com/" + input("输入账号ID：") + "/article"
